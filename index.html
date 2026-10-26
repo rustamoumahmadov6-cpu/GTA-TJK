@@ -3,240 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTA Душанбе 3D - Лоиҳаи Пурра</title>
+    <title>GTA Душанбе 3D - Лоиҳаи Пурраи Шаҳр</title>
     <style>
         * { box-sizing: border-box; }
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #87ceeb;
-            font-family: Arial, sans-serif;
+            background-color: #0b1d3a;
+            font-family: 'Courier New', Courier, monospace;
             user-select: none;
         }
-        #ui {
+        #hud-container {
             position: absolute;
             top: 20px;
             left: 20px;
             color: #ffffff;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 18px 22px;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 20px 25px;
             border-radius: 12px;
-            border: 2px solid #ffcc00;
-            z-index: 10;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 2px solid #00ffcc;
+            z-index: 100;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
+            pointer-events: none;
+            min-width: 260px;
         }
-        h1 { margin: 0 0 8px 0; font-size: 20px; color: #ffcc00; text-transform: uppercase; }
-        p { margin: 5px 0; font-size: 14px; }
-        #speed-text { color: #00ffcc; font-weight: bold; }
-        #damage-text { color: #ff4444; font-weight: bold; }
+        h1 {
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            color: #ffcc00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 6px;
+        }
+        .hud-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 15px;
+        }
+        .hud-label { color: #aaaaaa; }
+        .hud-value { color: #00ffcc; font-weight: bold; }
+        #car-status-val { color: #ff3333; font-weight: bold; }
+        
+        #crosshair {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 6px; height: 6px;
+            background: #ff0000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99;
+            pointer-events: none;
+        }
     </style>
-    <!-- Three.js Library -->
+    <!-- Three.js Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <div id="ui">
+    <div id="crosshair"></div>
+    <div id="hud-container">
         <h1>GTA: Душанбе 3D</h1>
-        <p>Идоракунӣ: <b>W, A, S, D</b> ё тирчаҳо</p>
-        <p>Суръат: <span id="speed-text">0</span> км/с</p>
-        <p>Ҳолати мошин: <span id="damage-text">Ҳамааш солим аст (100%)</span></p>
+        <div class="hud-row"><span class="hud-label">Ҷойгоҳ:</span><span class="hud-value">Хиёбони Рӯдакӣ</span></div>
+        <div class="hud-row"><span class="hud-label">Суръат:</span><span class="hud-value"><span id="speed-val">0</span> км/с</span></div>
+        <div class="hud-row"><span class="hud-label">Саломатии мошин:</span><span class="hud-value" id="car-status-val">100%</span></div>
+        <div class="hud-row"><span class="hud-label">Минтақа:</span><span class="hud-value">Маркази Шаҳр</span></div>
     </div>
 
     <script>
-        // Ибтидои саҳна ва камера
+        /*************************************************************
+         * ИБТИДОИ САҲНА, КАМЕРА ВА РЕНДЕРЕРИ 3D
+         *************************************************************/
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87ceeb);
-        scene.fog = new THREE.FogExp2(0x87ceeb, 0.003);
+        scene.fog = new THREE.FogExp2(0x87ceeb, 0.0025);
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 4000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.body.appendChild(renderer.domElement);
 
-        // Рушноӣ ва сояҳо
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        scene.add(ambientLight);
+        /*************************************************************
+         * НУРУГУЗОРИИ ПЕШРАФТА ВА СОЯҲО
+         *************************************************************/
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+        hemiLight.position.set(0, 500, 0);
+        scene.add(hemiLight);
 
         const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-        dirLight.position.set(100, 300, 100);
+        dirLight.position.set(400, 800, 400);
         dirLight.castShadow = true;
+        dirLight.shadow.camera.top = 600;
+        dirLight.shadow.camera.bottom = -600;
+        dirLight.shadow.camera.left = -600;
+        dirLight.shadow.camera.right = 600;
+        dirLight.shadow.camera.near = 0.1;
+        dirLight.shadow.camera.far = 2500;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
         scene.add(dirLight);
 
-        // Замин ва шабакаи роҳҳои Душанбе
-        const groundGeo = new THREE.PlaneGeometry(3000, 3000);
-        const groundMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.9 });
+        /*************************************************************
+         * ЗАМИН ВА ШАБАКАИ ХИЁБОНҲОИ ДУШАНБЕ
+         *************************************************************/
+        const groundGeo = new THREE.PlaneGeometry(4000, 4000);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.9 });
         const ground = new THREE.Mesh(groundGeo, groundMat);
         ground.rotation.x = -Math.PI / 2;
         ground.receiveShadow = true;
         scene.add(ground);
 
-        const roadMat = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.8 });
-        const lineMat = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
+        const roadMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
+        const yellowLineMat = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
 
-        for (let i = -1200; i <= 1200; i += 150) {
-            let roadX = new THREE.Mesh(new THREE.PlaneGeometry(30, 3000), roadMat);
+        const roadGridSize = 3000;
+        const roadStep = 150;
+
+        for (let i = -roadGridSize / 2; i <= roadGridSize / 2; i += roadStep) {
+            let roadX = new THREE.Mesh(new THREE.PlaneGeometry(32, roadGridSize), roadMat);
             roadX.rotation.x = -Math.PI / 2;
-            roadX.position.set(i, 0.01, 0);
+            roadX.position.set(i, 0.02, 0);
+            roadX.receiveShadow = true;
             scene.add(roadX);
 
-            let lineX = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 3000), lineMat);
+            let lineX = new THREE.Mesh(new THREE.PlaneGeometry(0.8, roadGridSize), yellowLineMat);
             lineX.rotation.x = -Math.PI / 2;
-            lineX.position.set(i, 0.02, 0);
+            lineX.position.set(i, 0.03, 0);
             scene.add(lineX);
 
-            let roadZ = new THREE.Mesh(new THREE.PlaneGeometry(3000, 30), roadMat);
+            let roadZ = new THREE.Mesh(new THREE.PlaneGeometry(roadGridSize, 32), roadMat);
             roadZ.rotation.x = -Math.PI / 2;
-            roadZ.position.set(0, 0.015, i);
+            roadZ.position.set(0, 0.025, i);
+            roadZ.receiveShadow = true;
             scene.add(roadZ);
 
-            let lineZ = new THREE.Mesh(new THREE.PlaneGeometry(3000, 0.6), lineMat);
+            let lineZ = new THREE.Mesh(new THREE.PlaneGeometry(roadGridSize, 0.8), yellowLineMat);
             lineZ.rotation.x = -Math.PI / 2;
-            lineZ.position.set(0, 0.025, i);
+            lineZ.position.set(0, 0.035, i);
             scene.add(lineZ);
         }
 
-        // Сохтани биноҳои шаҳр дар кварталҳо
-        const buildingColors = [0xd1d1d1, 0xb0c4de, 0xdcdcdc, 0xdeb887, 0xbc8f8f, 0xa9a9a9];
-        for (let x = -1300; x <= 1300; x += 75) {
-            for (let z = -1300; z <= 1300; z += 75) {
-                if (Math.abs(x % 150) < 40 || Math.abs(z % 150) < 40) continue;
+        /*************************************************************
+         * ТАВЛИДИ БИНОҲОИ БАЛАНДИ ШАҲР
+         *************************************************************/
+        const buildingColors = [0xd0d0d0, 0xb4c6e7, 0xe2e2e2, 0xdeb887, 0xbc8f8f, 0x999999, 0x2b3e50];
+        for (let x = -1600; x <= 1600; x += roadStep) {
+            for (let z = -1600; z <= 1600; z += roadStep) {
+                if (Math.abs(x) < 50 || Math.abs(z) < 50) continue;
 
-                let bHeight = 30 + Math.random() * 90;
-                let bWidth = 45 + Math.random() * 15;
-                let bDepth = 45 + Math.random() * 15;
+                let bWidth = 70 + Math.random() * 30;
+                let bDepth = 70 + Math.random() * 30;
+                let bHeight = 50 + Math.random() * 150;
 
                 let bGeo = new THREE.BoxGeometry(bWidth, bHeight, bDepth);
-                let bMat = new THREE.MeshStandardMaterial({ 
+                let bMat = new THREE.MeshStandardMaterial({
                     color: buildingColors[Math.floor(Math.random() * buildingColors.length)],
-                    roughness: 0.4
+                    roughness: 0.3,
+                    metalness: 0.1
                 });
                 let building = new THREE.Mesh(bGeo, bMat);
-                building.position.set(x + 37.5, bHeight / 2, z + 37.5);
+                building.position.set(x + roadStep / 2, bHeight / 2, z + roadStep / 2);
                 building.castShadow = true;
                 building.receiveShadow = true;
                 scene.add(building);
             }
         }
 
-        // Мошини бозигар (Муфассал)
-        const carGroup = new THREE.Group();
+        /*************************************************************
+         * СОХТАНИ МОШИНИ БОЗИГАР
+         *************************************************************/
+        const playerCar = new THREE.Group();
 
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xcc0000, metalness: 0.8, roughness: 0.2 });
-        const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.6, 4.2), bodyMat);
-        lowerBody.position.y = 0.5;
-        carGroup.add(lowerBody);
+        const carBodyMat = new THREE.MeshStandardMaterial({ color: 0xcc0000, metalness: 0.85, roughness: 0.15 });
+        const carBody = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.75, 4.6), carBodyMat);
+        carBody.position.y = 0.55;
+        carBody.castShadow = true;
+        playerCar.add(carBody);
 
         const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.1 });
-        const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.6, 2.2), cabinMat);
-        cabin.position.set(0, 1.0, -0.2);
-        carGroup.add(cabin);
+        const carCabin = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.65, 2.4), cabinMat);
+        carCabin.position.set(0, 1.15, -0.2);
+        carCabin.castShadow = true;
+        playerCar.add(carCabin);
 
-        const lightMat = new THREE.MeshBasicMaterial({ color: 0xffffaa });
-        const headlight1 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.1), lightMat);
-        headlight1.position.set(0.65, 0.45, 2.11);
-        carGroup.add(headlight1);
+        const headlightMat = new THREE.MeshBasicMaterial({ color: 0xffffcc });
+        const hl1 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.1), headlightMat);
+        hl1.position.set(0.7, 0.5, 2.31);
+        playerCar.add(hl1);
+        const hl2 = hl1.clone();
+        hl2.position.set(-0.7, 0.5, 2.31);
+        playerCar.add(hl2);
 
-        const headlight2 = headlight1.clone();
-        headlight2.position.set(-0.65, 0.45, 2.11);
-        carGroup.add(headlight2);
-
-        const wheelGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.35, 24);
-        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+        const wheelGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.38, 24);
+        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 });
         const wheelPositions = [
-            [-1.0, 0.38, 1.4], [1.0, 0.38, 1.4],
-            [-1.0, 0.38, -1.4], [1.0, 0.38, -1.4]
+            [-1.1, 0.42, 1.5], [1.1, 0.42, 1.5],
+            [-1.1, 0.42, -1.5], [1.1, 0.42, -1.5]
         ];
+        const wheels = [];
         wheelPositions.forEach(pos => {
             let wheel = new THREE.Mesh(wheelGeo, wheelMat);
             wheel.rotation.z = Math.PI / 2;
             wheel.position.set(...pos);
-            carGroup.add(wheel);
+            wheel.castShadow = true;
+            playerCar.add(wheel);
+            wheels.push(wheel);
         });
 
-        carGroup.position.set(0, 0, 300);
-        scene.add(carGroup);
+        playerCar.position.set(0, 0, 400);
+        scene.add(playerCar);
 
-        // Мошинҳои трафики шаҳр
+        /*************************************************************
+         * ТРАФИКИ МОШИНҲОИ ШАҲР
+         *************************************************************/
         const trafficCars = [];
-        const tColors = [0x0044cc, 0xffffff, 0x333333, 0xffcc00, 0x008000, 0xff8c00];
-        for (let i = 0; i < 20; i++) {
+        const tColors = [0x0033cc, 0xffffff, 0x222222, 0xffaa00, 0x008800, 0x880088];
+
+        for (let i = 0; i < 40; i++) {
             let tGroup = new THREE.Group();
             let tBody = new THREE.Mesh(
-                new THREE.BoxGeometry(1.9, 0.6, 4.2), 
-                new THREE.MeshStandardMaterial({ color: tColors[i % tColors.length], metalness: 0.5 })
+                new THREE.BoxGeometry(2.1, 0.75, 4.4),
+                new THREE.MeshStandardMaterial({ color: tColors[i % tColors.length], metalness: 0.6 })
             );
             tBody.position.y = 0.5;
+            tBody.castShadow = true;
             tGroup.add(tBody);
 
-            let tX = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.floor(Math.random() * 6) * 150);
-            let tZ = (Math.random() - 0.5) * 2500;
-            tGroup.position.set(tX, 0, tZ);
+            let laneX = (Math.random() > 0.5 ? 1 : -1) * (16 + Math.floor(Math.random() * 10) * roadStep);
+            let laneZ = (Math.random() - 0.5) * 3000;
+            tGroup.position.set(laneX, 0, laneZ);
             scene.add(tGroup);
-            trafficCars.push({ group: tGroup, speed: 0.4 + Math.random() * 0.5 });
+            trafficCars.push({ group: tGroup, speed: 0.5 + Math.random() * 0.6, direction: Math.random() > 0.5 ? 1 : -1 });
         }
 
-        // Идоракунӣ тавассути тугмаҳо
+        /*************************************************************
+         * ИДОРАКУНӢ ВА ФИЗИКАИ БОЗӢ
+         *************************************************************/
         const keys = {};
         window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
         window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
-        let carSpeed = 0;
-        let carAngle = 0;
-        const maxSpeed = 1.2;
-        const acceleration = 0.02;
-        let health = 100;
+        let speed = 0, angle = 0;
+        const maxSpeed = 1.6;
+        const acceleration = 0.025;
+        let carHealth = 100;
 
+        /*************************************************************
+         * ДАВРАИ АСОСИИ БОЗӢ (GAME LOOP)
+         *************************************************************/
         function animate() {
             requestAnimationFrame(animate);
 
             if (keys['w'] || keys['arrowup']) {
-                carSpeed = Math.min(carSpeed + acceleration, maxSpeed);
+                speed = Math.min(speed + acceleration, maxSpeed);
             } else if (keys['s'] || keys['arrowdown']) {
-                carSpeed = Math.max(carSpeed - acceleration, -maxSpeed / 2);
+                speed = Math.max(speed - acceleration, -maxSpeed / 2);
             } else {
-                carSpeed *= 0.94;
+                speed *= 0.94;
             }
 
-            if (Math.abs(carSpeed) > 0.02) {
-                let turnFactor = carSpeed / maxSpeed;
-                if (keys['a'] || keys['arrowleft']) carAngle += 0.035 * turnFactor;
-                if (keys['d'] || keys['arrowright']) carAngle -= 0.035 * turnFactor;
+            if (Math.abs(speed) > 0.02) {
+                let turnFactor = speed / maxSpeed;
+                if (keys['a'] || keys['arrowleft']) angle += 0.04 * turnFactor;
+                if (keys['d'] || keys['arrowright']) angle -= 0.04 * turnFactor;
             }
 
-            carGroup.rotation.y = carAngle;
-            carGroup.position.x -= Math.sin(carAngle) * carSpeed;
-            carGroup.position.z -= Math.cos(carAngle) * carSpeed;
+            playerCar.rotation.y = angle;
+            playerCar.position.x -= Math.sin(angle) * speed;
+            playerCar.position.z -= Math.cos(angle) * speed;
 
-            // Маҳдудияти ҳудуди шаҳр
-            if (carGroup.position.x > 1350) carGroup.position.x = 1350;
-            if (carGroup.position.x < -1350) carGroup.position.x = -1350;
-            if (carGroup.position.z > 1350) carGroup.position.z = 1350;
-            if (carGroup.position.z < -1350) carGroup.position.z = -1350;
+            wheels.forEach(w => w.rotation.x += speed * 0.2);
 
-            // Трафик ва санҷиши садамаҳо
+            const limit = 1850;
+            if (playerCar.position.x > limit) playerCar.position.x = limit;
+            if (playerCar.position.x < -limit) playerCar.position.x = -limit;
+            if (playerCar.position.z > limit) playerCar.position.z = limit;
+            if (playerCar.position.z < -limit) playerCar.position.z = -limit;
+
             trafficCars.forEach(item => {
-                item.group.position.z += item.speed;
-                if (item.group.position.z > 1400) item.group.position.z = -1400;
+                item.group.position.z += item.speed * item.direction;
+                if (item.group.position.z > 1900) item.group.position.z = -1900;
+                if (item.group.position.z < -1900) item.group.position.z = 1900;
 
-                let distance = carGroup.position.distanceTo(item.group.position);
-                if (distance < 3.0 && Math.abs(carSpeed) > 0.2) {
-                    health -= 3;
-                    if (health < 0) health = 0;
-                    document.getElementById('damage-text').innerText = `Садама рух дод! Саломатӣ: ${health}%`;
-                    carSpeed = -carSpeed * 0.4;
+                let dist = playerCar.position.distanceTo(item.group.position);
+                if (dist < 3.5 && Math.abs(speed) > 0.3) {
+                    carHealth -= 5;
+                    if (carHealth < 0) carHealth = 0;
+                    document.getElementById('car-status-val').innerText = carHealth + '%';
+                    speed = -speed * 0.4;
                 }
             });
 
-            document.getElementById('speed-text').innerText = Math.round(Math.abs(carSpeed) * 80);
+            document.getElementById('speed-val').innerText = Math.round(Math.abs(speed) * 100);
 
-            // Камераи пушти мошин
-            let camDist = 14;
-            let camHeight = 5;
-            let targetX = carGroup.position.x + Math.sin(carAngle) * camDist;
-            let targetZ = carGroup.position.z + Math.cos(carAngle) * camDist;
+            let camDist = 16;
+            let camHeight = 5.8;
+            let targetX = playerCar.position.x + Math.sin(angle) * camDist;
+            let targetZ = playerCar.position.z + Math.cos(angle) * camDist;
 
-            camera.position.lerp(new THREE.Vector3(targetX, carGroup.position.y + camHeight, targetZ), 0.15);
-            camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z);
+            camera.position.lerp(new THREE.Vector3(targetX, playerCar.position.y + camHeight, targetZ), 0.15);
+            camera.lookAt(playerCar.position.x, playerCar.position.y + 1, playerCar.position.z);
 
             renderer.render(scene, camera);
         }
