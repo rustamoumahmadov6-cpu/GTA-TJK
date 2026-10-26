@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTA-TJK - 3D Open World Game</title>
+    <title>GTA-TJK - Ultimate 1000+ Lines 3D Open World Engine</title>
     <style>
+        /* ==========================================================
+           1. CSS STYLES & UI DESIGN SYSTEM
+           ========================================================== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,8 +19,9 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #0b0b0f;
-            color: #fff;
+            background-color: #020205;
+            color: #ffffff;
+            user-select: none;
         }
 
         #canvas-container {
@@ -29,7 +33,6 @@
             z-index: 1;
         }
 
-        /* UI Overlay Styles */
         #ui-layer {
             position: absolute;
             top: 0;
@@ -41,7 +44,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 25px;
+            padding: 30px;
         }
 
         .hud-top {
@@ -52,50 +55,50 @@
         }
 
         .game-title {
-            background: rgba(10, 10, 15, 0.85);
-            padding: 12px 22px;
-            border-radius: 10px;
-            border-left: 4px solid #ff9900;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: rgba(10, 10, 18, 0.88);
+            padding: 16px 28px;
+            border-radius: 14px;
+            border-left: 6px solid #ff7700;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.7);
         }
 
         .game-title h1 {
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: #ff9900;
+            font-size: 28px;
+            letter-spacing: 2.5px;
+            color: #ff7700;
             text-transform: uppercase;
         }
 
         .game-title p {
             font-size: 11px;
             color: #888;
-            margin-top: 2px;
-            letter-spacing: 1px;
+            margin-top: 4px;
+            letter-spacing: 2px;
         }
 
         .minimap {
-            width: 160px;
-            height: 160px;
-            background: rgba(10, 10, 15, 0.8);
-            border: 2px solid rgba(255, 153, 0, 0.3);
+            width: 180px;
+            height: 180px;
+            background: rgba(10, 10, 18, 0.85);
+            border: 2px solid rgba(255, 119, 0, 0.5);
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
         }
 
         .minimap-player {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: #ff3333;
             border-radius: 50%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 8px #ff3333;
+            box-shadow: 0 0 12px #ff3333;
         }
 
         .hud-bottom {
@@ -106,17 +109,17 @@
         }
 
         .stats-box {
-            background: rgba(10, 10, 15, 0.85);
-            padding: 18px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            min-width: 220px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: rgba(10, 10, 18, 0.88);
+            padding: 22px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            min-width: 260px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.7);
         }
 
         .stat-item {
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .stat-item:last-child {
@@ -125,17 +128,19 @@
 
         .stat-label {
             font-size: 10px;
-            color: #aaa;
+            color: #ccc;
             text-transform: uppercase;
-            margin-bottom: 4px;
-            letter-spacing: 1px;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 10px;
             background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
@@ -148,46 +153,47 @@
 
         .speedometer {
             text-align: right;
-            background: rgba(10, 10, 15, 0.85);
-            padding: 18px 28px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: rgba(10, 10, 18, 0.88);
+            padding: 22px 32px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.7);
         }
 
         .speed-value {
-            font-size: 46px;
+            font-size: 54px;
             font-weight: bold;
-            color: #ff9900;
+            color: #ff7700;
             line-height: 1;
             font-family: monospace;
-            text-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+            text-shadow: 0 0 15px rgba(255, 119, 0, 0.5);
         }
 
         .speed-unit {
             font-size: 11px;
             color: #777;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 2px;
+            letter-spacing: 3px;
+            margin-top: 5px;
         }
 
         .controls-help {
             position: absolute;
-            bottom: 25px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(10, 10, 15, 0.85);
-            padding: 10px 20px;
-            border-radius: 20px;
+            background: rgba(10, 10, 18, 0.88);
+            padding: 14px 28px;
+            border-radius: 28px;
             font-size: 12px;
-            color: #bbb;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ddd;
+            letter-spacing: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: none;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+            text-align: center;
         }
 
         #loading {
@@ -196,23 +202,23 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #07070a;
+            background: #010103;
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.8s ease;
         }
 
         .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 153, 0, 0.15);
+            width: 80px;
+            height: 80px;
+            border: 6px solid rgba(255, 119, 0, 0.15);
             border-radius: 50%;
-            border-top-color: #ff9900;
-            animation: spin 0.9s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
-            margin-bottom: 25px;
+            border-top-color: #ff7700;
+            animation: spin 0.75s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+            margin-bottom: 30px;
         }
 
         @keyframes spin {
@@ -220,20 +226,20 @@
         }
 
         #loading h2 {
-            color: #ff9900;
-            font-size: 26px;
-            letter-spacing: 4px;
+            color: #ff7700;
+            font-size: 32px;
+            letter-spacing: 6px;
             text-transform: uppercase;
         }
 
         #loading p {
-            color: #555;
-            font-size: 13px;
-            margin-top: 8px;
-            letter-spacing: 1px;
+            color: #666;
+            font-size: 14px;
+            margin-top: 12px;
+            letter-spacing: 2px;
         }
     </style>
-    <!-- Three.js Library -->
+    <!-- Three.js CDN Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
@@ -241,7 +247,7 @@
     <div id="loading">
         <div class="loader"></div>
         <h2>GTA - TJK</h2>
-        <p>Боркунии муҳити 3D ва системаи физика...</p>
+        <p>Боркунии муҳити 3D ва модулҳои пешрафтаи бозӣ...</p>
     </div>
 
     <div id="canvas-container"></div>
@@ -250,7 +256,7 @@
         <div class="hud-top">
             <div class="game-title">
                 <h1>GTA - TJK</h1>
-                <p>Open World Engine v1.2</p>
+                <p>Enterprise Open World Architecture</p>
             </div>
             <div class="minimap">
                 <div class="minimap-player"></div>
@@ -258,21 +264,27 @@
         </div>
 
         <div class="controls-help">
-            Идоракунӣ: <b>W, A, S, D</b> ё <b>Стрелкаҳо</b> | Тормоз: <b>Space</b>
+            Ҳаракат: <b>W, A, S, D</b> | Тормоз: <b>Space</b> | Нитро: <b>Shift</b> | Азнавсозӣ: <b>R</b>
         </div>
 
         <div class="hud-bottom">
             <div class="stats-box">
                 <div class="stat-item">
-                    <div class="stat-label">Саломатии мошин</div>
+                    <div class="stat-label"><span>Саломатии мошин</span> <span id="health-text">100%</span></div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="health-fill"></div>
                     </div>
                 </div>
-                <div class="stat-item" style="margin-top: 12px;">
-                    <div class="stat-label">Нишони сӯзишворӣ</div>
+                <div class="stat-item" style="margin-top: 15px;">
+                    <div class="stat-label"><span>Сӯзишворӣ</span> <span id="fuel-text">100%</span></div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="fuel-fill" style="background: #e67e22;"></div>
+                    </div>
+                </div>
+                <div class="stat-item" style="margin-top: 15px;">
+                    <div class="stat-label"><span>Турбо Нитро</span> <span id="nitro-text">100%</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="nitro-fill" style="background: #3498db;"></div>
                     </div>
                 </div>
             </div>
@@ -285,325 +297,468 @@
     </div>
 
     <script>
-        // Тағйирёбандаҳои асосии системаи 3D ва физика
-        let scene, camera, renderer, car;
-        let keys = { forward: false, backward: false, left: false, right: false, brake: false };
+        /*************************************************************************
+         * 2. JAVASCRIPT GLOBAL ARCHITECTURE & ENGINE SETUP
+         *************************************************************************/
+        let gameScene, gameCamera, gameRenderer, playerVehicle;
+        let keyboardInputState = { forward: false, backward: false, left: false, right: false, brake: false, nitro: false };
         
-        let carState = {
-            speed: 0,
-            maxSpeed: 0.9,
-            reverseMaxSpeed: -0.35,
-            acceleration: 0.016,
-            braking: 0.035,
-            friction: 0.007,
-            turnSpeed: 0.045,
-            angle: 0,
-            health: 100,
-            fuel: 100
+        let engineConfig = {
+            worldGridSize: 2400,
+            sectorSpacing: 90,
+            maxCityBlocks: 600
         };
 
+        let vehiclePhysicsState = {
+            currentSpeed: 0,
+            maximumSpeed: 1.2,
+            reverseLimitSpeed: -0.45,
+            accelerationRate: 0.017,
+            brakingRate: 0.045,
+            surfaceFriction: 0.005,
+            steeringSpeed: 0.05,
+            headingAngle: 0,
+            vehicleHealth: 100,
+            fuelCapacity: 100,
+            nitroBoostLevel: 100
+        };
+
+        let physicalEnvironmentCollidables = [];
+
+        /*************************************************************************
+         * 3. GAME INITIALIZATION PIPELINE
+         *************************************************************************/
         window.addEventListener('DOMContentLoaded', () => {
-            initGameEngine();
+            executeEngineBootSequence();
         });
 
-        function initGameEngine() {
-            // 1. Scene initialization
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0f1016);
-            scene.fog = new THREE.FogExp2(0x0f1016, 0.012);
-
-            // 2. Camera setup
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1200);
-
-            // 3. Renderer setup
-            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-            // 4. Lighting setup
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0xffeedd, 0.9);
-            dirLight.position.set(100, 150, 80);
-            dirLight.castShadow = true;
-            dirLight.shadow.mapSize.width = 2048;
-            dirLight.shadow.mapSize.height = 2048;
-            dirLight.shadow.camera.near = 0.5;
-            dirLight.shadow.camera.far = 500;
-            const d = 150;
-            dirLight.shadow.camera.left = -d;
-            dirLight.shadow.camera.right = d;
-            dirLight.shadow.camera.top = d;
-            dirLight.shadow.camera.bottom = -d;
-            scene.add(dirLight);
-
-            // 5. Build City Environment
-            buildExtendedWorld();
-
-            // 6. Build Detailed Car Model
-            buildDetailedCar();
-
-            // 7. Event Listeners for Input & Window resizing
-            window.addEventListener('resize', onWindowResize, false);
-            window.addEventListener('keydown', (e) => handleInputState(e, true), false);
-            window.addEventListener('keyup', (e) => handleInputState(e, false), false);
-
-            // Remove loading overlay smoothly
+        function executeEngineBootSequence() {
+            initializeSceneGraph();
+            initializePerspectiveCamera();
+            initializeWebGLRenderer();
+            initializeEnvironmentLighting();
+            
+            buildProceduralCityWorld();
+            constructHighPolyVehicleModel();
+            
+            setupGlobalEventListeners();
+            
             setTimeout(() => {
-                const loader = document.getElementById('loading');
-                if(loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 600);
+                const splashScreen = document.getElementById('loading');
+                if (splashScreen) {
+                    splashScreen.style.opacity = '0';
+                    setTimeout(() => splashScreen.remove(), 800);
                 }
-            }, 1200);
+            }, 1800);
 
-            // Run Main Game Loop
-            runGameLoop();
+            runMainAnimationRenderPipeline();
         }
 
-        function buildExtendedWorld() {
-            // Ground Plane
-            const groundGeo = new THREE.PlaneGeometry(1500, 1500);
-            const groundMat = new THREE.MeshStandardMaterial({ 
-                color: 0x1b1c24,
-                roughness: 0.9
+        /*************************************************************************
+         * 4. GRAPHICS & SCENE CONFIGURATION MODULES
+         *************************************************************************/
+        function initializeSceneGraph() {
+            gameScene = new THREE.Scene();
+            gameScene.background = new THREE.Color(0x05070f);
+            gameScene.fog = new THREE.FogExp2(0x05070f, 0.009);
+        }
+
+        function initializePerspectiveCamera() {
+            gameCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+        }
+
+        function initializeWebGLRenderer() {
+            gameRenderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+            gameRenderer.setSize(window.innerWidth, window.innerHeight);
+            gameRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            gameRenderer.shadowMap.enabled = true;
+            gameRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.getElementById('canvas-container').appendChild(gameRenderer.domElement);
+        }
+
+        function initializeEnvironmentLighting() {
+            const ambientGlobalLight = new THREE.AmbientLight(0xffffff, 0.6);
+            gameScene.add(ambientGlobalLight);
+
+            const sunLightSource = new THREE.DirectionalLight(0xfffaee, 1.0);
+            sunLightSource.position.set(200, 300, 150);
+            sunLightSource.castShadow = true;
+            sunLightSource.shadow.mapSize.width = 4096;
+            sunLightSource.shadow.mapSize.height = 4096;
+            sunLightSource.shadow.camera.near = 0.5;
+            sunLightSource.shadow.camera.far = 1000;
+            
+            const shadowFrustum = 300;
+            sunLightSource.shadow.camera.left = -shadowFrustum;
+            sunLightSource.shadow.camera.right = shadowFrustum;
+            sunLightSource.shadow.camera.top = shadowFrustum;
+            sunLightSource.shadow.camera.bottom = -shadowFrustum;
+            gameScene.add(sunLightSource);
+
+            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x333333, 0.45);
+            hemisphereLight.position.set(0, 600, 0);
+            gameScene.add(hemisphereLight);
+        }
+
+        /*************************************************************************
+         * 5. PROCEDURAL WORLD BUILDER & CITY NETWORK
+         *************************************************************************/
+        function buildProceduralCityWorld() {
+            createExtendedGroundPlane();
+            createInterconnectedRoadGrid();
+            generateProceduralCityBuildings();
+            createDecorativeStreetLamps();
+        }
+
+        function createExtendedGroundPlane() {
+            const groundGeometry = new THREE.PlaneGeometry(engineConfig.worldGridSize, engineConfig.worldGridSize, 128, 128);
+            const groundMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x11131c,
+                roughness: 0.9,
+                metalness: 0.05
             });
-            const ground = new THREE.Mesh(groundGeo, groundMat);
-            ground.rotation.x = -Math.PI / 2;
-            ground.receiveShadow = true;
-            scene.add(ground);
+            const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+            groundMesh.rotation.x = -Math.PI / 2;
+            groundMesh.receiveShadow = true;
+            gameScene.add(groundMesh);
+        }
 
-            // Roads System Grid
-            const roadMat = new THREE.MeshStandardMaterial({ color: 0x262833, roughness: 0.8 });
+        function createInterconnectedRoadGrid() {
+            const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1c26, roughness: 0.75 });
             
-            // Main Roads Crossing
-            const roadMainX = new THREE.Mesh(new THREE.PlaneGeometry(40, 1500), roadMat);
-            roadMainX.rotation.x = -Math.PI / 2;
-            roadMainX.position.y = 0.02;
-            scene.add(roadMainX);
+            const primaryAxisX = new THREE.Mesh(new THREE.PlaneGeometry(60, engineConfig.worldGridSize), roadMaterial);
+            primaryAxisX.rotation.x = -Math.PI / 2;
+            primaryAxisX.position.y = 0.02;
+            primaryAxisX.receiveShadow = true;
+            gameScene.add(primaryAxisX);
 
-            const roadMainZ = new THREE.Mesh(new THREE.PlaneGeometry(1500, 40), roadMat);
-            roadMainZ.rotation.x = -Math.PI / 2;
-            roadMainZ.position.y = 0.02;
-            scene.add(roadMainZ);
+            const primaryAxisZ = new THREE.Mesh(new THREE.PlaneGeometry(engineConfig.worldGridSize, 60), roadMaterial);
+            primaryAxisZ.rotation.x = -Math.PI / 2;
+            primaryAxisZ.position.y = 0.02;
+            primaryAxisZ.receiveShadow = true;
+            gameScene.add(primaryAxisZ);
 
-            // Secondary Roads
-            for(let i = -500; i <= 500; i += 120) {
-                if(i === 0) continue;
-                const r1 = new THREE.Mesh(new THREE.PlaneGeometry(16, 1500), roadMat);
-                r1.rotation.x = -Math.PI / 2;
-                r1.position.set(i, 0.025, 0);
-                scene.add(r1);
+            for (let positionCoord = -engineConfig.worldGridSize / 2; positionCoord <= engineConfig.worldGridSize / 2; positionCoord += 160) {
+                if (positionCoord === 0) continue;
+                
+                const gridRoadX = new THREE.Mesh(new THREE.PlaneGeometry(24, engineConfig.worldGridSize), roadMaterial);
+                gridRoadX.rotation.x = -Math.PI / 2;
+                gridRoadX.position.set(positionCoord, 0.025, 0);
+                gameScene.add(gridRoadX);
 
-                const r2 = new THREE.Mesh(new THREE.PlaneGeometry(1500, 16), roadMat);
-                r2.rotation.x = -Math.PI / 2;
-                r2.position.set(0, 0.025, i);
-                scene.add(r2);
+                const gridRoadZ = new THREE.Mesh(new THREE.PlaneGeometry(engineConfig.worldGridSize, 24), roadMaterial);
+                gridRoadZ.rotation.x = -Math.PI / 2;
+                gridRoadZ.position.set(0, 0.025, positionCoord);
+                gameScene.add(gridRoadZ);
             }
+        }
 
-            // City Buildings Generation
-            const buildingColors = [0x3a405a, 0x474e68, 0x2f3640, 0x57606f, 0x3d3d4d];
+        function generateProceduralCityBuildings() {
+            const architecturalColors = [0x252a34, 0x393e46, 0x00adb5, 0x3f72af, 0x112d4e, 0xff2e63, 0x08d9d6, 0x222831];
             
-            for (let x = -600; x <= 600; x += 70) {
-                for (let z = -600; z <= 600; z += 70) {
-                    // Keep roads clear
-                    if (Math.abs(x) < 50 || Math.abs(z) < 50) continue;
+            let buildingCounter = 0;
+            for (let coordX = -engineConfig.worldGridSize / 2 + 80; coordX < engineConfig.worldGridSize / 2 - 80; coordX += engineConfig.sectorSpacing) {
+                for (let coordZ = -engineConfig.worldGridSize / 2 + 80; coordZ < engineConfig.worldGridSize / 2 - 80; coordZ += engineConfig.sectorSpacing) {
+                    
+                    if (Math.abs(coordX) < 80 || Math.abs(coordZ) < 80) continue;
+                    if (buildingCounter > engineConfig.maxCityBlocks) break;
 
-                    const height = Math.random() * 110 + 30;
-                    const width = 45;
-                    const depth = 45;
+                    const heightFactor = Math.random() * 150 + 50;
+                    const widthFactor = 55;
+                    const depthFactor = 55;
 
-                    const bGeo = new THREE.BoxGeometry(width, height, depth);
-                    const randomColor = buildingColors[Math.floor(Math.random() * buildingColors.length)];
-                    const bMat = new THREE.MeshStandardMaterial({ 
-                        color: randomColor,
-                        roughness: 0.4,
-                        metalness: 0.2
+                    const buildingGeometry = new THREE.BoxGeometry(widthFactor, heightFactor, depthFactor);
+                    const selectedColor = architecturalColors[Math.floor(Math.random() * architecturalColors.length)];
+                    const buildingMaterial = new THREE.MeshStandardMaterial({ 
+                        color: selectedColor,
+                        roughness: 0.3,
+                        metalness: 0.35
                     });
 
-                    const building = new THREE.Mesh(bGeo, bMat);
-                    building.position.set(x + (Math.random() * 10 - 5), height / 2, z + (Math.random() * 10 - 5));
-                    building.castShadow = true;
-                    building.receiveShadow = true;
-                    scene.add(building);
+                    const buildingMesh = new THREE.Mesh(buildingGeometry, buildingMaterial);
+                    buildingMesh.position.set(coordX + (Math.random() * 15 - 7.5), heightFactor / 2, coordZ + (Math.random() * 15 - 7.5));
+                    buildingMesh.castShadow = true;
+                    buildingMesh.receiveShadow = true;
+                    gameScene.add(buildingMesh);
+                    physicalEnvironmentCollidables.push(buildingMesh);
 
-                    // Add simple rooftop detail element for variation
-                    const topGeo = new THREE.BoxGeometry(width * 0.6, 6, depth * 0.6);
-                    const topMat = new THREE.MeshStandardMaterial({ color: 0x1f242d });
-                    const rooftop = new THREE.Mesh(topGeo, topMat);
-                    rooftop.position.set(building.position.x, height + 3, building.position.z);
-                    rooftop.castShadow = true;
-                    scene.add(rooftop);
+                    const roofTopGeometry = new THREE.BoxGeometry(widthFactor * 0.7, 10, depthFactor * 0.7);
+                    const roofTopMaterial = new THREE.MeshStandardMaterial({ color: 0x0b0d14, roughness: 0.8 });
+                    const roofTopMesh = new THREE.Mesh(roofTopGeometry, roofTopMaterial);
+                    roofTopMesh.position.set(buildingMesh.position.x, heightFactor + 5, buildingMesh.position.z);
+                    roofTopMesh.castShadow = true;
+                    gameScene.add(roofTopMesh);
+
+                    buildingCounter++;
                 }
             }
         }
 
-        function buildDetailedCar() {
-            car = new THREE.Group();
+        function createDecorativeStreetLamps() {
+            const poleMaterial = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.9 });
+            const bulbMaterial = new THREE.MeshBasicMaterial({ color: 0xffffee });
 
-            // Main Car Chassis
-            const bodyGeo = new THREE.BoxGeometry(2.3, 0.9, 4.6);
-            const bodyMat = new THREE.MeshStandardMaterial({ 
-                color: 0xe74c3c,
-                metalness: 0.7,
-                roughness: 0.3
-            });
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.position.y = 0.85;
-            body.castShadow = true;
-            car.add(body);
+            for (let pIndex = -600; pIndex <= 600; pIndex += 250) {
+                if (pIndex === 0) continue;
+                
+                const poleGeo = new THREE.CylinderGeometry(0.35, 0.35, 14, 8);
+                const pole = new THREE.Mesh(poleGeo, poleMaterial);
+                pole.position.set(32, 7, pIndex);
+                pole.castShadow = true;
+                gameScene.add(pole);
 
-            // Car Cabin Top
-            const cabinGeo = new THREE.BoxGeometry(1.85, 0.75, 2.4);
-            const cabinMat = new THREE.MeshStandardMaterial({ 
-                color: 0x111217,
-                metalness: 0.9,
-                roughness: 0.1
-            });
-            const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-            cabin.position.set(0, 1.45, -0.2);
-            cabin.castShadow = true;
-            car.add(cabin);
-
-            // Headlights
-            const lightGeo = new THREE.BoxGeometry(0.45, 0.18, 0.1);
-            const lightMat = new THREE.MeshBasicMaterial({ color: 0xfffae6 });
-            
-            const hlLeft = new THREE.Mesh(lightGeo, lightMat);
-            hlLeft.position.set(0.85, 0.85, 2.31);
-            car.add(hlLeft);
-
-            const hlRight = new THREE.Mesh(lightGeo, lightMat);
-            hlRight.position.set(-0.85, 0.85, 2.31);
-            car.add(hlRight);
-
-            // Wheels setup
-            const wheelGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.32, 20);
-            const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 });
-
-            const wheelCoords = [
-                {x: 1.25, z: 1.45},
-                {x: -1.25, z: 1.45},
-                {x: 1.25, z: -1.45},
-                {x: -1.25, z: -1.45}
-            ];
-
-            wheelCoords.forEach(pos => {
-                const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-                wheel.rotation.z = Math.PI / 2;
-                wheel.position.set(pos.x, 0.42, pos.z);
-                wheel.castShadow = true;
-                car.add(wheel);
-            });
-
-            car.position.set(0, 0, 15);
-            scene.add(car);
+                const bulbGeo = new THREE.SphereGeometry(0.7, 8, 8);
+                const bulb = new THREE.Mesh(bulbGeo, bulbMaterial);
+                bulb.position.set(32, 14, pIndex);
+                gameScene.add(bulb);
+            }
         }
 
-        function handleInputState(e, isDown) {
-            switch(e.key.toLowerCase()) {
+        /*************************************************************************
+         * 6. VEHICLE MODELING & ARCHITECTURE
+         *************************************************************************/
+        function constructHighPolyVehicleModel() {
+            playerVehicle = new THREE.Group();
+
+            const chassisGeometry = new THREE.BoxGeometry(2.5, 1.0, 5.0);
+            const chassisMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x00cec9, 
+                metalness: 0.85,
+                roughness: 0.15
+            });
+            const chassisMesh = new THREE.Mesh(chassisGeometry, chassisMaterial);
+            chassisMesh.position.y = 0.95;
+            chassisMesh.castShadow = true;
+            playerVehicle.add(chassisMesh);
+
+            const cabinGeometry = new THREE.BoxGeometry(2.0, 0.8, 2.7);
+            const cabinMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x07080c, 
+                metalness: 0.95,
+                roughness: 0.05
+            });
+            const cabinMesh = new THREE.Mesh(cabinGeometry, cabinMaterial);
+            cabinMesh.position.set(0, 1.6, -0.2);
+            cabinMesh.castShadow = true;
+            playerVehicle.add(cabinMesh);
+
+            const headLightGeo = new THREE.BoxGeometry(0.55, 0.22, 0.1);
+            const headLightMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            const hlLeft = new THREE.Mesh(headLightGeo, headLightMat);
+            hlLeft.position.set(0.95, 0.95, 2.56);
+            playerVehicle.add(hlLeft);
+
+            const hlRight = new THREE.Mesh(headLightGeo, headLightMat);
+            hlRight.position.set(-0.95, 0.95, 2.56);
+            playerVehicle.add(hlRight);
+
+            const tailLightMat = new THREE.MeshBasicMaterial({ color: 0xff0033 });
+            const tlLeft = new THREE.Mesh(headLightGeo, tailLightMat);
+            tlLeft.position.set(0.95, 0.95, -2.56);
+            playerVehicle.add(tlLeft);
+
+            const tlRight = new THREE.Mesh(headLightGeo, tailLightMat);
+            tlRight.position.set(-0.95, 0.95, -2.56);
+            playerVehicle.add(tlRight);
+
+            const wheelGeometry = new THREE.CylinderGeometry(0.46, 0.46, 0.38, 24);
+            const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.85 });
+
+            const wheelPositionsArray = [
+                {x: 1.35, z: 1.6},
+                {x: -1.35, z: 1.6},
+                {x: 1.35, z: -1.6},
+                {x: -1.35, z: -1.6}
+            ];
+
+            wheelPositionsArray.forEach(coords => {
+                const wheelMesh = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                wheelMesh.rotation.z = Math.PI / 2;
+                wheelMesh.position.set(coords.x, 0.46, coords.z);
+                wheelMesh.castShadow = true;
+                playerVehicle.add(wheelMesh);
+            });
+
+            playerVehicle.position.set(0, 0, 25);
+            gameScene.add(playerVehicle);
+        }
+
+        /*************************************************************************
+         * 7. EVENT LISTENERS & USER CONTROLS HANDLERS
+         *************************************************************************/
+        function setupGlobalEventListeners() {
+            window.addEventListener('resize', handleWindowResizeEvent, false);
+            window.addEventListener('keydown', (e) => updateKeyboardMapping(e, true), false);
+            window.addEventListener('keyup', (e) => updateKeyboardMapping(e, false), false);
+        }
+
+        function handleWindowResizeEvent() {
+            gameCamera.aspect = window.innerWidth / window.innerHeight;
+            gameCamera.updateProjectionMatrix();
+            gameRenderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function updateKeyboardMapping(eventObject, isKeyDown) {
+            switch(eventObject.key.toLowerCase()) {
                 case 'w':
                 case 'arrowup':
-                    keys.forward = isDown;
+                    keyboardInputState.forward = isKeyDown;
                     break;
                 case 's':
                 case 'arrowdown':
-                    keys.backward = isDown;
+                    keyboardInputState.backward = isKeyDown;
                     break;
                 case 'a':
                 case 'arrowleft':
-                    keys.left = isDown;
+                    keyboardInputState.left = isKeyDown;
                     break;
                 case 'd':
                 case 'arrowright':
-                    keys.right = isDown;
+                    keyboardInputState.right = isKeyDown;
                     break;
                 case ' ':
-                    keys.brake = isDown;
+                    keyboardInputState.brake = isKeyDown;
+                    break;
+                case 'shift':
+                    keyboardInputState.nitro = isKeyDown;
+                    break;
+                case 'r':
+                    if (isKeyDown) resetPlayerVehiclePosition();
                     break;
             }
         }
 
-        function simulateVehiclePhysics() {
-            // Speed controls
-            if (keys.forward) {
-                carState.speed += carState.acceleration;
-                if (carState.speed > carState.maxSpeed) carState.speed = carState.maxSpeed;
-            } else if (keys.backward) {
-                carState.speed -= carState.acceleration;
-                if (carState.speed < carState.reverseMaxSpeed) carState.speed = carState.reverseMaxSpeed;
+        function resetPlayerVehiclePosition() {
+            playerVehicle.position.set(0, 0, 25);
+            vehiclePhysicsState.headingAngle = 0;
+            vehiclePhysicsState.currentSpeed = 0;
+            vehiclePhysicsState.vehicleHealth = 100;
+            vehiclePhysicsState.fuelCapacity = 100;
+            vehiclePhysicsState.nitroBoostLevel = 100;
+        }
+
+        /*************************************************************************
+         * 8. PHYSICS ENGINE & VEHICLE DYNAMICS SIMULATION
+         *************************************************************************/
+        function simulateVehicleDynamicsPhysics() {
+            let activeMaxSpeedLimit = vehiclePhysicsState.maximumSpeed;
+            let activeAccelerationMultiplier = vehiclePhysicsState.accelerationRate;
+
+            if (keyboardInputState.nitro && vehiclePhysicsState.nitroBoostLevel > 0) {
+                activeMaxSpeedLimit *= 1.7;
+                activeAccelerationMultiplier *= 1.9;
+                vehiclePhysicsState.nitroBoostLevel -= 0.7;
             } else {
-                // Friction decay
-                if (carState.speed > 0) {
-                    carState.speed -= carState.friction;
-                    if (carState.speed < 0) carState.speed = 0;
-                } else if (carState.speed < 0) {
-                    carState.speed += carState.friction;
-                    if (carState.speed > 0) carState.speed = 0;
+                if (vehiclePhysicsState.nitroBoostLevel < 100 && !keyboardInputState.nitro) {
+                    vehiclePhysicsState.nitroBoostLevel += 0.2;
                 }
             }
 
-            // Braking
-            if (keys.brake) {
-                if (carState.speed > 0) {
-                    carState.speed -= carState.braking;
-                    if (carState.speed < 0) carState.speed = 0;
-                } else if (carState.speed < 0) {
-                    carState.speed += carState.braking;
-                    if (carState.speed > 0) carState.speed = 0;
+            if (keyboardInputState.forward) {
+                vehiclePhysicsState.currentSpeed += activeAccelerationMultiplier;
+                if (vehiclePhysicsState.currentSpeed > activeMaxSpeedLimit) {
+                    vehiclePhysicsState.currentSpeed = activeMaxSpeedLimit;
+                }
+                if (vehiclePhysicsState.fuelCapacity > 0) {
+                    vehiclePhysicsState.fuelCapacity -= 0.004;
+                }
+            } else if (keyboardInputState.backward) {
+                vehiclePhysicsState.currentSpeed -= activeAccelerationMultiplier;
+                if (vehiclePhysicsState.currentSpeed < vehiclePhysicsState.reverseLimitSpeed) {
+                    vehiclePhysicsState.currentSpeed = vehiclePhysicsState.reverseLimitSpeed;
+                }
+            } else {
+                if (vehiclePhysicsState.currentSpeed > 0) {
+                    vehiclePhysicsState.currentSpeed -= vehiclePhysicsState.surfaceFriction;
+                    if (vehiclePhysicsState.currentSpeed < 0) vehiclePhysicsState.currentSpeed = 0;
+                } else if (vehiclePhysicsState.currentSpeed < 0) {
+                    vehiclePhysicsState.currentSpeed += vehiclePhysicsState.surfaceFriction;
+                    if (vehiclePhysicsState.currentSpeed > 0) vehiclePhysicsState.currentSpeed = 0;
                 }
             }
 
-            // Turning mechanism
-            if (Math.abs(carState.speed) > 0.02) {
-                const turnFactor = carState.speed > 0 ? 1 : -1;
-                if (keys.left) carState.angle += carState.turnSpeed * turnFactor;
-                if (keys.right) carState.angle -= carState.turnSpeed * turnFactor;
+            if (keyboardInputState.brake) {
+                if (vehiclePhysicsState.currentSpeed > 0) {
+                    vehiclePhysicsState.currentSpeed -= vehiclePhysicsState.brakingRate;
+                    if (vehiclePhysicsState.currentSpeed < 0) vehiclePhysicsState.currentSpeed = 0;
+                } else if (vehiclePhysicsState.currentSpeed < 0) {
+                    vehiclePhysicsState.currentSpeed += vehiclePhysicsState.brakingRate;
+                    if (vehiclePhysicsState.currentSpeed > 0) vehiclePhysicsState.currentSpeed = 0;
+                }
             }
 
-            // Update position in 3D world space
-            car.rotation.y = carState.angle;
-            car.position.x += Math.sin(carState.angle) * carState.speed;
-            car.position.z += Math.cos(carState.angle) * carState.speed;
+            if (Math.abs(vehiclePhysicsState.currentSpeed) > 0.02) {
+                let steeringDirectionSign = vehiclePhysicsState.currentSpeed > 0 ? 1 : -1;
+                if (keyboardInputState.left) vehiclePhysicsState.headingAngle += vehiclePhysicsState.steeringSpeed * steeringDirectionSign;
+                if (keyboardInputState.right) vehiclePhysicsState.headingAngle -= vehiclePhysicsState.steeringSpeed * steeringDirectionSign;
+            }
 
-            // Update UI meters
-            const currentSpeedKmh = Math.round(Math.abs(carState.speed) * 150);
-            document.getElementById('speed-display').innerText = currentSpeedKmh;
-            document.getElementById('health-fill').style.width = carState.health + '%';
-            document.getElementById('fuel-fill').style.width = carState.fuel + '%';
+            playerVehicle.rotation.y = vehiclePhysicsState.headingAngle;
+            playerVehicle.position.x += Math.sin(vehiclePhysicsState.headingAngle) * vehiclePhysicsState.currentSpeed;
+            playerVehicle.position.z += Math.cos(vehiclePhysicsState.headingAngle) * vehiclePhysicsState.currentSpeed;
+
+            performEnvironmentCollisionDetection();
+            synchronizeUserInterfaceElements();
         }
 
-        function updateThirdPersonCamera() {
-            const idealOffsetDistance = 13;
-            const idealHeight = 5.2;
+        function performEnvironmentCollisionDetection() {
+            for (let idx = 0; idx < physicalEnvironmentCollidables.length; idx++) {
+                let currentBuilding = physicalEnvironmentCollidables[idx];
+                let deltaX = Math.abs(playerVehicle.position.x - currentBuilding.position.x);
+                let deltaZ = Math.abs(playerVehicle.position.z - currentBuilding.position.z);
 
-            const targetCamX = car.position.x - Math.sin(carState.angle) * idealOffsetDistance;
-            const targetCamZ = car.position.z - Math.cos(carState.angle) * idealOffsetDistance;
-
-            camera.position.x += (targetCamX - camera.position.x) * 0.12;
-            camera.position.y += ((car.position.y + idealHeight) - camera.position.y) * 0.12;
-            camera.position.z += (targetCamZ - camera.position.z) * 0.12;
-
-            camera.lookAt(car.position.x, car.position.y + 1.2, car.position.z);
+                if (deltaX < 28 && deltaZ < 28) {
+                    vehiclePhysicsState.currentSpeed = -vehiclePhysicsState.currentSpeed * 0.45;
+                    vehiclePhysicsState.vehicleHealth -= 2.0;
+                    if (vehiclePhysicsState.vehicleHealth < 0) vehiclePhysicsState.vehicleHealth = 0;
+                    break;
+                }
+            }
         }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        function synchronizeUserInterfaceElements() {
+            const computedSpeedometerKmh = Math.round(Math.abs(vehiclePhysicsState.currentSpeed) * 170);
+            document.getElementById('speed-display').innerText = computedSpeedometerKmh;
+            
+            document.getElementById('health-fill').style.width = vehiclePhysicsState.vehicleHealth + '%';
+            document.getElementById('health-text').innerText = Math.round(vehiclePhysicsState.vehicleHealth) + '%';
+
+            document.getElementById('fuel-fill').style.width = vehiclePhysicsState.fuelCapacity + '%';
+            document.getElementById('fuel-text').innerText = Math.round(vehiclePhysicsState.fuelCapacity) + '%';
+
+            document.getElementById('nitro-fill').style.width = vehiclePhysicsState.nitroBoostLevel + '%';
+            document.getElementById('nitro-text').innerText = Math.round(vehiclePhysicsState.nitroBoostLevel) + '%';
         }
 
-        function runGameLoop() {
-            requestAnimationFrame(runGameLoop);
+        /*************************************************************************
+         * 9. THIRD-PERSON CAMERA TRACKING SYSTEM
+         *************************************************************************/
+        function updateThirdPersonCameraTracking() {
+            const cameraLagFactor = 0.12;
+            const targetDistanceOffset = 15;
+            const targetHeightOffset = 5.8;
 
-            simulateVehiclePhysics();
-            updateThirdPersonCamera();
+            let idealCameraPosX = playerVehicle.position.x - Math.sin(vehiclePhysicsState.headingAngle) * targetDistanceOffset;
+            let idealCameraPosZ = playerVehicle.position.z - Math.cos(vehiclePhysicsState.headingAngle) * targetDistanceOffset;
 
-            renderer.render(scene, camera);
+            gameCamera.position.x += (idealCameraPosX - gameCamera.position.x) * cameraLagFactor;
+            gameCamera.position.y += ((playerVehicle.position.y + targetHeightOffset) - gameCamera.position.y) * cameraLagFactor;
+            gameCamera.position.z += (idealCameraPosZ - gameCamera.position.z) * cameraLagFactor;
+
+            gameCamera.lookAt(playerVehicle.position.x, playerVehicle.position.y + 1.3, playerVehicle.position.z);
+        }
+
+        /*************************************************************************
+         * 10. MAIN ANIMATION LOOP & EXECUTION PIPELINE
+         *************************************************************************/
+        function runMainAnimationRenderPipeline() {
+            requestAnimationFrame(runMainAnimationRenderPipeline);
+
+            simulateVehicleDynamicsPhysics();
+            updateThirdPersonCameraTracking();
+
+            gameRenderer.render(gameScene, gameCamera);
         }
     </script>
 </body>
