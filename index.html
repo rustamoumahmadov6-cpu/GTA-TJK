@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA Душанбе 3D - Нусхаи Шаҳр</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #111;
+            font-family: Arial, sans-serif;
+        }
+        #ui {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 2px solid #ffcc00;
+            z-index: 10;
+        }
+        h1 { margin: 0 0 5px 0; font-size: 20px; color: #ffcc00; }
+        p { margin: 3px 0; font-size: 14px; }
+        #damage { color: #ff4444; font-weight: bold; }
+    </style>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="ui">
+        <h1>GTA: Душанбе 3D (Хиёбони Рӯдакӣ)</h1>
+        <p>Идоракунӣ: <b>W, A, S, D</b> ё тирчаҳо</p>
+        <p>Ҳолати мошин: <span id="damage">Ҳамааш солим аст</span></p>
+    </div>
+
+    <script>
+        // Саҳна, камера ва рендерер
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb); // Осмони рӯз
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Рушноӣ
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        dirLight.position.set(30, 50, 30);
+        scene.add(dirLight);
+
+        // Замин (Шаҳр)
+        const groundGeo = new THREE.PlaneGeometry(400, 400);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        scene.add(ground);
+
+        // Хиёбони марказӣ (Роҳи калон)
+        const roadGeo = new THREE.PlaneGeometry(16, 400);
+        const roadMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a });
+        const road = new THREE.Mesh(roadGeo, roadMat);
+        road.rotation.x = -Math.PI / 2;
+        road.position.y = 0.01;
+        scene.add(road);
+
+        // Хатти мобайни роҳ
+        const lineGeo = new THREE.PlaneGeometry(0.5, 400);
+        const lineMat = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
+        const roadLine = new THREE.Mesh(lineGeo, lineMat);
+        roadLine.rotation.x = -Math.PI / 2;
+        roadLine.position.y = 0.02;
+        scene.add(roadLine);
+
+        // Сохтани биноҳо (Монанди биноҳои Душанбе дар ду тарафи роҳ)
+        const buildings = [];
+        const buildingMat = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+        const roofMat = new THREE.MeshStandardMaterial({ color: 0x884444 });
+
+        for (let i = -180; i < 180; i += 25) {
+            // Биноҳои тарафи чап
+            let heightL = 15 + Math.random() * 25;
+            let bGeoL = new THREE.BoxGeometry(12, heightL, 12);
+            let bMeshL = new THREE.Mesh(bGeoL, buildingMat);
+            bMeshL.position.set(-22, heightL / 2, i);
+            scene.add(bMeshL);
+            buildings.push(bMeshL);
+
+            // Биноҳои тарафи рост
+            let heightR = 15 + Math.random() * 25;
+            let bGeoR = new THREE.BoxGeometry(12, heightR, 12);
+            let bMeshR = new THREE.Mesh(bGeoR, buildingMat);
+            bMeshR.position.set(22, heightR / 2, i);
+            scene.add(bMeshR);
+            buildings.push(bMeshR);
+        }
+
+        // Мошини бозигар (Машинаи сурх)
+        const carGroup = new THREE.Group();
+
+        const bodyGeo = new THREE.BoxGeometry(1.6, 0.8, 3.5);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xff2222 });
+        const carBody = new THREE.Mesh(bodyGeo, bodyMat);
+        carBody.position.y = 0.5;
+        carGroup.add(carBody);
+
+        const wheelGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.3, 16);
+        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+        const wheelPositions = [
+            [-0.9, 0.3, 1.2], [0.9, 0.3, 1.2],
+            [-0.9, 0.3, -1.2], [0.9, 0.3, -1.2]
+        ];
+        wheelPositions.forEach(pos => {
+            const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+            wheel.rotation.z = Math.PI / 2;
+            wheel.position.set(...pos);
+            carGroup.add(wheel);
+        });
+
+        carGroup.position.set(0, 0, 50);
+        scene.add(carGroup);
+
+        // Мошинҳои ҳаракаткунанда дар шаҳр (Трафик)
+        const trafficCars = [];
+        const trafficColors = [0x0055ff, 0xffffff, 0x333333, 0x228b22];
+        
+        for (let i = 0; i < 6; i++) {
+            let tBodyGeo = new THREE.BoxGeometry(1.6, 0.8, 3.5);
+            let tBodyMat = new THREE.MeshStandardMaterial({ color: trafficColors[i % trafficColors.length] });
+            let tCar = new THREE.Mesh(tBodyGeo, tBodyMat);
+            tCar.position.set(4, 0.4, -i * 40);
+            scene.add(tCar);
+            trafficCars.push(tCar);
+        }
+
+        // Идоракунии тугмаҳо
+        const keys = {};
+        window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
+        window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
+
+        let carSpeed = 0;
+        const maxSpeed = 0.5;
+        const acceleration = 0.012;
+        let health = 100;
+
+        // Давраи асосии бозӣ (Game Loop)
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Ҳаракати мошин бо тугмаҳо
+            if (keys['w'] || keys['arrowup']) {
+                carSpeed = Math.min(carSpeed + acceleration, maxSpeed);
+            } else if (keys['s'] || keys['arrowdown']) {
+                carSpeed = Math.max(carSpeed - acceleration, -maxSpeed / 2);
+            } else {
+                carSpeed *= 0.94; // Тормозкунии табиӣ
+            }
+
+            carGroup.position.z -= carSpeed;
+
+            // Гардиши мошин
+            if (keys['a'] || keys['arrowleft']) {
+                carGroup.rotation.y += 0.035 * (carSpeed / maxSpeed || 0.1);
+            }
+            if (keys['d'] || keys['arrowright']) {
+                carGroup.rotation.y -= 0.035 * (carSpeed / maxSpeed || 0.1);
+            }
+
+            // Маҳдудияти ҳудуди роҳ (ки мошин ба биноҳо набарояд)
+            if (carGroup.position.x > 7) carGroup.position.x = 7;
+            if (carGroup.position.x < -7) carGroup.position.x = -7;
+
+            // Санҷиши садама бо мошинҳои дигар (Трафик)
+            trafficCars.forEach(tCar => {
+                tCar.position.z += 0.2; // Ҳаракати мошинҳои дигар
+                if (tCar.position.z > 60) tCar.position.z = -150; // Аз нав баргардонидан ба пеш
+
+                // Санҷиши бархӯрд (Садама)
+                let distance = carGroup.position.distanceTo(tCar.position);
+                if (distance < 2.5 && Math.abs(carSpeed) > 0.1) {
+                    health -= 1;
+                    document.getElementById('damage').innerText = `Садама! Саломатӣ: ${health}%`;
+                    document.getElementById('damage').style.color = '#ff0000';
+                    carSpeed = -carSpeed * 0.5; // Қафо партофтани мошин ҳангоми садама
+                }
+            });
+
+            // Пайравӣ кардани камера пушти мошин
+            const cameraOffset = new THREE.Vector3(0, 4, 12);
+            cameraOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), carGroup.rotation.y);
+            camera.position.copy(carGroup.position).add(cameraOffset);
+            camera.lookAt(carGroup.position);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Мутобиқсозӣ ҳангоми тағири андозаи равзана
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
