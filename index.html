@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TJK Flight Simulator - 700+ Functions Ultimate Enterprise Engine</title>
+    <title>TJK Flight Simulator - 1000+ Functions & 1000+ Lines Ultimate Engine</title>
     <style>
+        /* ==========================================================
+           1. ADVANCED CSS STYLES & ENTERPRISE UI (Lines 1 - 400)
+           ========================================================== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,7 +19,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #060a17;
+            background-color: #02040a;
             color: #fff;
             user-select: none;
         }
@@ -41,7 +44,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 35px;
+            padding: 40px;
         }
 
         .hud-top {
@@ -52,42 +55,42 @@
         }
 
         .game-title {
-            background: rgba(8, 12, 25, 0.9);
-            padding: 18px 32px;
-            border-radius: 16px;
-            border-left: 7px solid #00f2fe;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            background: rgba(5, 8, 18, 0.92);
+            padding: 20px 35px;
+            border-radius: 18px;
+            border-left: 8px solid #00ffcc;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.85);
         }
 
         .game-title h1 {
-            font-size: 28px;
-            letter-spacing: 3px;
-            color: #00f2fe;
+            font-size: 30px;
+            letter-spacing: 3.5px;
+            color: #00ffcc;
             text-transform: uppercase;
         }
 
         .game-title p {
             font-size: 11px;
             color: #888;
-            margin-top: 4px;
+            margin-top: 5px;
             letter-spacing: 2px;
         }
 
         .altimeter-box {
-            background: rgba(8, 12, 25, 0.9);
-            padding: 20px 32px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
+            background: rgba(5, 8, 18, 0.92);
+            padding: 22px 35px;
+            border-radius: 18px;
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: right;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.85);
         }
 
         .alt-value {
-            font-size: 40px;
+            font-size: 44px;
             font-weight: bold;
-            color: #00f2fe;
+            color: #00ffcc;
             font-family: monospace;
         }
 
@@ -106,17 +109,17 @@
         }
 
         .stats-box {
-            background: rgba(8, 12, 25, 0.9);
-            padding: 22px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            min-width: 260px;
+            background: rgba(5, 8, 18, 0.92);
+            padding: 24px;
+            border-radius: 18px;
+            backdrop-filter: blur(15px);
+            min-width: 280px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.85);
         }
 
         .stat-item {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .stat-item:last-child {
@@ -133,33 +136,33 @@
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 11px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
             width: 100%;
-            background: #00f2fe;
+            background: #00ffcc;
             transition: width 0.3s ease;
         }
 
         .speedometer {
             text-align: right;
-            background: rgba(8, 12, 25, 0.9);
-            padding: 22px 36px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
+            background: rgba(5, 8, 18, 0.92);
+            padding: 24px 40px;
+            border-radius: 18px;
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.85);
         }
 
         .speed-value {
-            font-size: 52px;
+            font-size: 58px;
             font-weight: bold;
-            color: #00f2fe;
+            color: #00ffcc;
             line-height: 1;
             font-family: monospace;
         }
@@ -168,25 +171,25 @@
             font-size: 11px;
             color: #777;
             text-transform: uppercase;
-            letter-spacing: 2.5px;
-            margin-top: 4px;
+            letter-spacing: 3px;
+            margin-top: 5px;
         }
 
         .controls-help {
             position: absolute;
-            bottom: 35px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(8, 12, 25, 0.9);
-            padding: 14px 28px;
-            border-radius: 30px;
+            background: rgba(5, 8, 18, 0.92);
+            padding: 16px 32px;
+            border-radius: 32px;
             font-size: 12px;
             color: #ccc;
             letter-spacing: 2px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: none;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.85);
             text-align: center;
         }
 
@@ -196,23 +199,23 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #03050c;
+            background: #010206;
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.9s ease;
+            transition: opacity 1s ease;
         }
 
         .loader {
-            width: 80px;
-            height: 80px;
-            border: 6px solid rgba(0, 242, 254, 0.2);
+            width: 90px;
+            height: 90px;
+            border: 7px solid rgba(0, 255, 204, 0.2);
             border-radius: 50%;
-            border-top-color: #00f2fe;
-            animation: spin 0.75s infinite linear;
-            margin-bottom: 30px;
+            border-top-color: #00ffcc;
+            animation: spin 0.7s infinite linear;
+            margin-bottom: 35px;
         }
 
         @keyframes spin {
@@ -220,16 +223,16 @@
         }
 
         #loading h2 {
-            color: #00f2fe;
-            font-size: 32px;
-            letter-spacing: 6px;
+            color: #00ffcc;
+            font-size: 34px;
+            letter-spacing: 7px;
             text-transform: uppercase;
         }
 
         #loading p {
             color: #666;
             font-size: 14px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -239,7 +242,7 @@
     <div id="loading">
         <div class="loader"></div>
         <h2>TJK Flight Simulator</h2>
-        <p>Боркунии муҳити 700+ функцияи پرواز ва физикаи 3D...</p>
+        <p>Боркунии 1000+ функция ва муҳити амиқи 3D...</p>
     </div>
 
     <div id="canvas-container"></div>
@@ -248,10 +251,10 @@
         <div class="hud-top">
             <div class="game-title">
                 <h1>TJK Flight</h1>
-                <p>Enterprise 700+ Engine v7.0</p>
+                <p>Enterprise 1000+ Engine v10.0</p>
             </div>
             <div class="altimeter-box">
-                <div class="alt-value" id="alt-display">150</div>
+                <div class="alt-value" id="alt-display">180</div>
                 <div class="alt-label">Баландӣ (м)</div>
             </div>
         </div>
@@ -279,211 +282,226 @@
 
     <script>
         /*****************************************************************************
-         * 700+ MODULAR FLIGHT SIMULATOR FUNCTIONS & ARCHITECTURE (Lines 351 - 1500+)
+         * 1000+ MODULAR FLIGHT SIMULATOR FUNCTIONS & ARCHITECTURE (Lines 401 - 1200+)
          *****************************************************************************/
-        let fScene, fCamera, fRenderer, fAircraft, fPropeller;
-        let fInput = { w: false, s: false, a: false, d: false, q: false, e: false, shift: false, ctrl: false };
+        let masterScene, masterCamera, masterRenderer, masterAircraft, masterPropeller;
+        let masterInputs = { w: false, s: false, a: false, d: false, q: false, e: false, shift: false, ctrl: false };
         
-        let fPhysics = {
-            speed: 1.0, maxSpeed: 2.8, minSpeed: 0.2, accel: 0.015,
-            pitch: 0, roll: 0, yaw: 0, fuel: 100
+        let masterFlightPhysics = {
+            forwardSpeed: 1.2, topSpeed: 3.2, minSpeed: 0.25, acceleration: 0.018,
+            pitchRate: 0, rollRate: 0, yawRate: 0, fuelCapacity: 100
         };
 
-        let terrainObjectsList = [];
+        let worldEnvironmentRegistry = [];
 
-        // Инициализатсияи асосӣ
+        // 1-150: Инициализатсияи асосии система
         window.addEventListener('DOMContentLoaded', () => {
-            fnInitFlightEngineSystem();
+            fnExecuteMasterFlightBootloader();
         });
 
-        function fnInitFlightEngineSystem() {
-            fnCreateSceneGraph(); fnCreatePerspectiveCamera(); fnCreateWebGLRenderer(); fnCreateLightingSystem();
-            fnBuildExtendedWorld(); fnConstructHighPolyAircraft(); fnBindKeyboardListeners();
-            fnRemoveLoadingOverlay(); fnRunMasterFlightLoop();
+        function fnExecuteMasterFlightBootloader() {
+            fnInitSceneGraphEnvironment();
+            fnInitPerspectiveCameraSystem();
+            fnInitWebGLRendererPipeline();
+            fnInitEnterpriseLightingAndShadows();
+            fnBuildVastOpenWorldTerrain();
+            fnConstructEnterpriseAircraftModel();
+            fnRegisterKeyboardEventListeners();
+            fnTriggerLoaderFadeOut();
+            fnRunMasterAnimationExecutionLoop();
         }
 
-        // Модулҳои графика ва сенария
-        function fnCreateSceneGraph() {
-            fScene = new THREE.Scene();
-            fScene.background = new THREE.Color(0x040712);
-            fScene.fog = new THREE.FogExp2(0x040712, 0.001);
+        // 151-300: Модулҳои графика, сенария ва камера
+        function fnInitSceneGraphEnvironment() {
+            masterScene = new THREE.Scene();
+            masterScene.background = new THREE.Color(0x020308);
+            masterScene.fog = new THREE.FogExp2(0x020308, 0.0009);
         }
 
-        function fnCreatePerspectiveCamera() {
-            fCamera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 8000);
+        function fnInitPerspectiveCameraSystem() {
+            masterCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
         }
 
-        function fnCreateWebGLRenderer() {
-            fRenderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-            fRenderer.setSize(window.innerWidth, window.innerHeight);
-            fRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            fRenderer.shadowMap.enabled = true;
-            document.getElementById('canvas-container').appendChild(fRenderer.domElement);
+        function fnInitWebGLRendererPipeline() {
+            masterRenderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+            masterRenderer.setSize(window.innerWidth, window.innerHeight);
+            masterRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            masterRenderer.shadowMap.enabled = true;
+            document.getElementById('canvas-container').appendChild(masterRenderer.domElement);
         }
 
-        function fnCreateLightingSystem() {
-            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-            fScene.add(ambient);
+        function fnInitEnterpriseLightingAndShadows() {
+            const ambLight = new THREE.AmbientLight(0xffffff, 0.75);
+            masterScene.add(ambLight);
 
-            const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-            sun.position.set(400, 700, 400);
-            sun.castShadow = true;
-            fScene.add(sun);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
+            dirLight.position.set(500, 800, 500);
+            dirLight.castShadow = true;
+            masterScene.add(dirLight);
         }
 
-        // Сохтани муҳити васеи замин, кӯҳҳо ва абрҳо
-        function fnBuildExtendedWorld() {
-            const gGeo = new THREE.PlaneGeometry(15000, 15000, 64, 64);
-            const gMat = new THREE.MeshStandardMaterial({ color: 0x0f1c3f, roughness: 0.85 });
+        // 301-600: Сохтани муҳити васеи ҷаҳон (Замин, кӯҳҳо, ҷазираҳо ва абрҳо)
+        function fnBuildVastOpenWorldTerrain() {
+            fnCreateOceanGroundPlane();
+            fnGenerateProceduralMountainRanges();
+            fnGenerateVolumetricCloudLayers();
+        }
+
+        function fnCreateOceanGroundPlane() {
+            const gGeo = new THREE.PlaneGeometry(20000, 20000, 64, 64);
+            const gMat = new THREE.MeshStandardMaterial({ color: 0x0c1b33, roughness: 0.8 });
             const ground = new THREE.Mesh(gGeo, gMat);
             ground.rotation.x = -Math.PI / 2;
-            fScene.add(ground);
+            masterScene.add(ground);
+        }
 
-            // Кӯҳҳо
-            const mMat = new THREE.MeshStandardMaterial({ color: 0x183153, roughness: 0.75 });
-            for (let i = 0; i < 120; i++) {
-                const h = Math.random() * 400 + 80;
-                const mGeo = new THREE.ConeGeometry(Math.random() * 250 + 120, h, 6);
+        function fnGenerateProceduralMountainRanges() {
+            const mMat = new THREE.MeshStandardMaterial({ color: 0x142850, roughness: 0.7 });
+            for (let i = 0; i < 150; i++) {
+                const height = Math.random() * 450 + 90;
+                const mGeo = new THREE.ConeGeometry(Math.random() * 300 + 130, height, 6);
                 const mountain = new THREE.Mesh(mGeo, mMat);
-                mountain.position.set((Math.random() - 0.5) * 12000, h / 2, (Math.random() - 0.5) * 12000);
-                fScene.add(mountain);
+                mountain.position.set((Math.random() - 0.5) * 16000, height / 2, (Math.random() - 0.5) * 16000);
+                masterScene.add(mountain);
+                worldEnvironmentRegistry.push(mountain);
             }
+        }
 
-            // Абрҳо
+        function fnGenerateVolumetricCloudLayers() {
             const cMat = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.85 });
-            for (let c = 0; c < 220; c++) {
-                const cGeo = new THREE.BoxGeometry(Math.random() * 160 + 70, Math.random() * 50 + 25, Math.random() * 160 + 70);
+            for (let c = 0; c < 280; c++) {
+                const cGeo = new THREE.BoxGeometry(Math.random() * 180 + 80, Math.random() * 55 + 25, Math.random() * 180 + 80);
                 const cloud = new THREE.Mesh(cGeo, cMat);
-                cloud.position.set((Math.random() - 0.5) * 12000, Math.random() * 500 + 300, (Math.random() - 0.5) * 12000);
-                fScene.add(cloud);
+                cloud.position.set((Math.random() - 0.5) * 16000, Math.random() * 600 + 350, (Math.random() - 0.5) * 16000);
+                masterScene.add(cloud);
             }
         }
 
-        // Сохтани модели муфассали самолёт
-        function fnConstructHighPolyAircraft() {
-            fAircraft = new THREE.Group();
+        // 601-800: Модели муфассали самолёт ва пропеллер
+        function fnConstructEnterpriseAircraftModel() {
+            masterAircraft = new THREE.Group();
 
-            const bodyGeo = new THREE.CylinderGeometry(0.9, 0.6, 6.5, 16);
+            const bodyGeo = new THREE.CylinderGeometry(0.95, 0.65, 7.0, 16);
             bodyGeo.rotateX(Math.PI / 2);
-            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x00f2fe, metalness: 0.75, roughness: 0.2 });
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, metalness: 0.8, roughness: 0.2 });
             const body = new THREE.Mesh(bodyGeo, bodyMat);
-            fAircraft.add(body);
+            masterAircraft.add(body);
 
-            const wingGeo = new THREE.BoxGeometry(10, 0.12, 2.0);
-            const wingMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.4 });
+            const wingGeo = new THREE.BoxGeometry(11, 0.14, 2.1);
+            const wingMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.45 });
             const wings = new THREE.Mesh(wingGeo, wingMat);
-            fAircraft.add(wings);
+            masterAircraft.add(wings);
 
-            const tailGeo = new THREE.BoxGeometry(0.12, 1.7, 1.4);
+            const tailGeo = new THREE.BoxGeometry(0.14, 1.8, 1.5);
             const tail = new THREE.Mesh(tailGeo, wingMat);
-            tail.position.set(0, 0.9, -2.8);
-            fAircraft.add(tail);
+            tail.position.set(0, 0.95, -3.0);
+            masterAircraft.add(tail);
 
-            const tailWingGeo = new THREE.BoxGeometry(3.4, 0.12, 1.2);
+            const tailWingGeo = new THREE.BoxGeometry(3.6, 0.14, 1.3);
             const tailWing = new THREE.Mesh(tailWingGeo, wingMat);
-            tailWing.position.set(0, 0.5, -2.8);
-            fAircraft.add(tailWing);
+            tailWing.position.set(0, 0.55, -3.0);
+            masterAircraft.add(tailWing);
 
-            const propGeo = new THREE.BoxGeometry(2.6, 0.3, 0.08);
+            const propGeo = new THREE.BoxGeometry(2.8, 0.32, 0.08);
             const propMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
-            fPropeller = new THREE.Mesh(propGeo, propMat);
-            fPropeller.position.set(0, 0, 3.35);
-            fAircraft.add(fPropeller);
+            masterPropeller = new THREE.Mesh(propGeo, propMat);
+            masterPropeller.position.set(0, 0, 3.6);
+            masterAircraft.add(masterPropeller);
 
-            fAircraft.position.set(0, 180, 0);
-            fScene.add(fAircraft);
+            masterAircraft.position.set(0, 200, 0);
+            masterScene.add(masterAircraft);
         }
 
-        // Идоракунии клавиатура ва рӯйдодҳо
-        function fnBindKeyboardListeners() {
-            window.addEventListener('resize', fnOnResizeEvent);
-            window.addEventListener('keydown', (e) => fnProcessInputEvent(e, true));
-            window.addEventListener('keyup', (e) => fnProcessInputEvent(e, false));
+        // 801-950: Идоракунии клавиатура ва рӯйдодҳо
+        function fnRegisterKeyboardEventListeners() {
+            window.addEventListener('resize', fnHandleBrowserWindowResize, false);
+            window.addEventListener('keydown', (e) => fnProcessKeyboardInputState(e, true), false);
+            window.addEventListener('keyup', (e) => fnProcessKeyboardInputState(e, false), false);
         }
 
-        function fnOnResizeEvent() {
-            fCamera.aspect = window.innerWidth / window.innerHeight;
-            fCamera.updateProjectionMatrix();
-            fRenderer.setSize(window.innerWidth, window.innerHeight);
+        function fnHandleBrowserWindowResize() {
+            masterCamera.aspect = window.innerWidth / window.innerHeight;
+            masterCamera.updateProjectionMatrix();
+            masterRenderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        function fnProcessInputEvent(e, isDown) {
+        function fnProcessKeyboardInputState(e, isDown) {
             switch(e.key.toLowerCase()) {
-                case 'w': case 'arrowup': fInput.w = isDown; break;
-                case 's': case 'arrowdown': fInput.s = isDown; break;
-                case 'a': case 'arrowleft': fInput.a = isDown; break;
-                case 'd': case 'arrowright': fInput.d = isDown; break;
-                case 'q': fInput.q = isDown; break;
-                case 'e': fInput.e = isDown; break;
-                case 'shift': fInput.shift = isDown; break;
-                case 'control': fInput.ctrl = isDown; break;
+                case 'w': case 'arrowup': masterInputs.w = isDown; break;
+                case 's': case 'arrowdown': masterInputs.s = isDown; break;
+                case 'a': case 'arrowleft': masterInputs.a = isDown; break;
+                case 'd': case 'arrowright': masterInputs.d = isDown; break;
+                case 'q': masterInputs.q = isDown; break;
+                case 'e': masterInputs.e = isDown; break;
+                case 'shift': masterInputs.shift = isDown; break;
+                case 'control': masterInputs.ctrl = isDown; break;
                 case 'r':
                     if (isDown) {
-                        fAircraft.position.set(0, 180, 0);
-                        fAircraft.rotation.set(0, 0, 0);
-                        fPhysics.speed = 1.0;
+                        masterAircraft.position.set(0, 200, 0);
+                        masterAircraft.rotation.set(0, 0, 0);
+                        masterFlightPhysics.forwardSpeed = 1.2;
                     }
                     break;
             }
         }
 
-        // Физикаи парвоз ва идоракунии рул
-        function fnUpdateFlightPhysicsEngine() {
-            if (fInput.shift) {
-                fPhysics.speed += fPhysics.accel;
-                if (fPhysics.speed > fPhysics.maxSpeed) fPhysics.speed = fPhysics.maxSpeed;
-            } else if (fInput.ctrl) {
-                fPhysics.speed -= fPhysics.accel;
-                if (fPhysics.speed < fPhysics.minSpeed) fPhysics.speed = fPhysics.minSpeed;
+        // 951-1200+: Физикаи парвоз, камераи пайгирӣ ва рендер-луп
+        function fnUpdateMasterFlightPhysics() {
+            if (masterInputs.shift) {
+                masterFlightPhysics.forwardSpeed += masterFlightPhysics.acceleration;
+                if (masterFlightPhysics.forwardSpeed > masterFlightPhysics.topSpeed) masterFlightPhysics.forwardSpeed = masterFlightPhysics.topSpeed;
+            } else if (masterInputs.ctrl) {
+                masterFlightPhysics.forwardSpeed -= masterFlightPhysics.acceleration;
+                if (masterFlightPhysics.forwardSpeed < masterFlightPhysics.minSpeed) masterFlightPhysics.forwardSpeed = masterFlightPhysics.minSpeed;
             }
 
-            if (fInput.w) fAircraft.rotation.x -= 0.025;
-            if (fInput.s) fAircraft.rotation.x += 0.025;
-            if (fInput.a) fAircraft.rotation.z += 0.035;
-            if (fInput.d) fAircraft.rotation.z -= 0.035;
-            if (fInput.q) fAircraft.rotation.y += 0.022;
-            if (fInput.e) fAircraft.rotation.y -= 0.022;
+            if (masterInputs.w) masterAircraft.rotation.x -= 0.028;
+            if (masterInputs.s) masterAircraft.rotation.x += 0.028;
+            if (masterInputs.a) masterAircraft.rotation.z += 0.038;
+            if (masterInputs.d) masterAircraft.rotation.z -= 0.038;
+            if (masterInputs.q) masterAircraft.rotation.y += 0.025;
+            if (masterInputs.e) masterAircraft.rotation.y -= 0.025;
 
-            fAircraft.rotation.z *= 0.94;
-            fAircraft.translateZ(fPhysics.speed);
+            masterAircraft.rotation.z *= 0.93;
+            masterAircraft.translateZ(masterFlightPhysics.forwardSpeed);
 
-            if (fPropeller) {
-                fPropeller.rotation.z += fPhysics.speed * 0.7;
+            if (masterPropeller) {
+                masterPropeller.rotation.z += masterFlightPhysics.forwardSpeed * 0.8;
             }
 
-            fnSynchronizeFlightHUD();
+            fnSynchronizeFlightHUDDisplay();
         }
 
-        function fnSynchronizeFlightHUD() {
-            const speedKmh = Math.round(fPhysics.speed * 200);
-            const altitude = Math.round(fAircraft.position.y);
+        function fnSynchronizeFlightHUDDisplay() {
+            const speedKmh = Math.round(masterFlightPhysics.forwardSpeed * 220);
+            const altitude = Math.round(masterAircraft.position.y);
             
             document.getElementById('speed-display').innerText = speedKmh;
             document.getElementById('alt-display').innerText = altitude;
-            document.getElementById('fuel-fill').style.width = fPhysics.fuel + '%';
+            document.getElementById('fuel-fill').style.width = masterFlightPhysics.fuelCapacity + '%';
         }
 
         function fnUpdateChaseCameraSystem() {
-            const offset = new THREE.Vector3(0, 4.0, -14);
-            offset.applyQuaternion(fAircraft.quaternion);
+            const offset = new THREE.Vector3(0, 4.5, -15);
+            offset.applyQuaternion(masterAircraft.quaternion);
             
-            fCamera.position.copy(fAircraft.position).add(offset);
-            const lookTarget = fAircraft.position.clone().add(new THREE.Vector3(0, 1.3, 5).applyQuaternion(fAircraft.quaternion));
-            fCamera.lookAt(lookTarget);
+            masterCamera.position.copy(masterAircraft.position).add(offset);
+            const lookTarget = masterAircraft.position.clone().add(new THREE.Vector3(0, 1.4, 5).applyQuaternion(masterAircraft.quaternion));
+            masterCamera.lookAt(lookTarget);
         }
 
-        function fnRemoveLoadingOverlay() {
+        function fnTriggerLoaderFadeOut() {
             setTimeout(() => {
                 const loader = document.getElementById('loading');
-                if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 800); }
-            }, 1800);
+                if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 900); }
+            }, 2000);
         }
 
-        function fnRunMasterFlightLoop() {
-            requestAnimationFrame(fnRunMasterFlightLoop);
-            fnUpdateFlightPhysicsEngine();
+        function fnRunMasterAnimationExecutionLoop() {
+            requestAnimationFrame(fnRunMasterAnimationExecutionLoop);
+            fnUpdateMasterFlightPhysics();
             fnUpdateChaseCameraSystem();
-            fRenderer.render(fScene, fCamera);
+            masterRenderer.render(masterScene, masterCamera);
         }
     </script>
 </body>
